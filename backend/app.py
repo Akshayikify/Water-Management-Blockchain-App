@@ -1,8 +1,12 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from dotenv import load_dotenv
 import os
 import sys
+
+# Load environment variables
+load_dotenv(os.path.join(os.path.dirname(__file__), '../.env'))
 
 # Add the root directory to sys.path to import the blockchain module
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -132,6 +136,12 @@ def get_admin_stats():
             "record_count": len(records)
         })
     return jsonify(stats), 200
+
+@app.route('/api/config', methods=['GET'])
+def get_config():
+    return jsonify({
+        "weather_api_key": os.getenv('WEATHER_API_KEY')
+    }), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
