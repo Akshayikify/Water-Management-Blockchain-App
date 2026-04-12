@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaChain | Blockchain Water Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Auth Section -->
+        <section id="auth-section" class="visible">
+            <div class="glass-card auth-card">
+                <div class="logo">
+                    <i data-lucide="droplets"></i>
+                    <h1>AquaChain</h1>
+                </div>
+                <p class="subtitle">Secure Blockchain Water Management</p>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                    <button class="tab-btn" onclick="switchTab('register')">Register</button>
+                </div>
+
+                <form id="login-form" onsubmit="handleAuth(event, 'login')">
+                    <input type="text" placeholder="Username" required id="login-user">
+                    <input type="password" placeholder="Password" required id="login-pass">
+                    <button type="submit" class="primary-btn">Sign In</button>
+                </form>
+
+                <form id="register-form" class="hidden" onsubmit="handleAuth(event, 'register')">
+                    <input type="text" placeholder="Username" required id="reg-user">
+                    <input type="password" placeholder="Password" required id="reg-pass">
+                    <select id="reg-role">
+                        <option value="consumer">Consumer</option>
+                        <option value="admin">Admin (Gov Authority)</option>
+                    </select>
+                    <button type="submit" class="primary-btn">Create Account</button>
+                </form>
+                <div id="auth-msg" class="msg"></div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="hidden">
+            <nav class="navbar">
+                <div class="nav-brand">
+                    <i data-lucide="droplets"></i>
+                    <span>AquaChain</span>
+                </div>
+                <div class="user-info">
+                    <span id="user-display">Welcome, User</span>
+                    <button onclick="logout()" class="logout-btn">
+                        <i data-lucide="log-out"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </nav>
+
+            <main class="dashboard-content">
+                <div class="sidebar">
+                    <button class="nav-item active" onclick="showView('overview')"><i data-lucide="layout-dashboard"></i> Overview</button>
+                    <button class="nav-item" onclick="showView('blockchain')"><i data-lucide="database"></i> Blockchain Ledger</button>
+                    <button id="admin-nav" class="nav-item hidden" onclick="showView('admin')"><i data-lucide="shield-check"></i> Admin Panel</button>
+                </div>
+
+                <div class="view-container">
+                    <!-- Overview View -->
+                    <div id="overview-view" class="view">
+                        <div class="stats-grid">
+                            <div class="stat-card glass-card">
+                                <h3>Daily Limit</h3>
+                                <p id="limit-val">500 L</p>
+                                <div class="progress-container">
+                                    <div id="limit-progress" class="progress-bar"></div>
+                                </div>
+                            </div>
+                            <div class="stat-card glass-card">
+                                <h3>Total Usage</h3>
+                                <p id="total-usage">0 L</p>
+                            </div>
+                            <div class="stat-card glass-card">
+                                <h3>Total Blocks</h3>
+                                <p id="block-count">0</p>
+                            </div>
+                        </div>
+
+                        <div class="main-grid">
+                            <div class="glass-card chart-container">
+                                <h3>Usage Trends</h3>
+                                <canvas id="usageChart"></canvas>
+                            </div>
+                            <div class="glass-card form-container">
+                                <h3>Submit Water Usage</h3>
+                                <form onsubmit="submitUsage(event)">
+                                    <input type="number" id="usage-input" placeholder="Liters (e.g. 45.5)" step="0.1" required>
+                                    <button type="submit" class="primary-btn">Record to Blockchain</button>
+                                </form>
+                                <div id="usage-msg" class="msg"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blockchain View -->
+                    <div id="blockchain-view" class="view hidden">
+                        <div class="view-header">
+                            <h2>Immutable Ledger</h2>
+                            <span id="chain-status" class="status-badge">Valid</span>
+                        </div>
+                        <div id="blockchain-list" class="block-list">
+                            <!-- Blocks will be injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Admin View -->
+                    <div id="admin-view" class="view hidden">
+                        <h2>Authority Dashboard</h2>
+                        <div class="glass-card">
+                            <table id="admin-table">
+                               <thead>
+                                   <tr>
+                                       <th>User</th>
+                                       <th>Total Consumption</th>
+                                       <th>Records</th>
+                                       <th>Status</th>
+                                   </tr>
+                               </thead>
+                               <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="main-footer">
+                <p>&copy; 2026 AquaChain Blockchain Water Management System</p>
+                <div class="footer-links">
+                    <p>Status: <span id="system-status" style="color: var(--accent);">● Online</span></p>
+                    <p>Node: 127.0.0.1</p>
+                    <p>Chain Identity: SHA-256 Verified</p>
+                </div>
+            </footer>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
